@@ -1,0 +1,9 @@
+name: Nextjs
+version: 1.0.0
+owner:
+  name: Chen Yuan
+  contact: chenyuan@h8r.io
+description: This is an stack built with Next.js
+icon: https://assets.vercel.com/image/upload/v1607554385/repositories/next-js/next-logo.png
+url: https://gin-gonic.com/
+tags: ["nextjs", "frontend", "Javascript", "Typescript"]

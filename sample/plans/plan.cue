@@ -1,15 +1,23 @@
+/*
+	Sample plan.
+*/
+
 package main
 
 import (
 	"dagger.io/dagger"
-	"universe.dagger.io/alpine"
-	"universe.dagger.io/bash"
-	// "universe.dagger.io/docker"
+	"github.com/h8r-dev/stacks/cuelib/scm/github"
 )
 
 dagger.#Plan & {
 	client: {
-		filesystem: "output.yaml": write: contents: actions.up.readFile.contents
+		filesystem: {
+			code: read: contents: dagger.#FS
+			"./output.yaml": write: {
+				// Convert a CUE value into a YAML formatted string
+				contents: actions.up.outputYaml.output
+			}
+		}
 		commands: kubeconfig: {
 			name: "cat"
 			args: ["\(env.KUBECONFIG)"]
@@ -20,34 +28,46 @@ dagger.#Plan & {
 			APP_NAME:        string
 			ORGANIZATION:    string
 			GITHUB_TOKEN:    dagger.#Secret
-			REPO_VISIBILITY: "public" | *"private"
+			REPO_VISIBILITY: "public" | "private"
 		}
 	}
 
-	actions: up: {
-		base: alpine.#Build & {
-			packages: bash: {}
-		}
-		run: bash.#Run & {
-			input:  base.output
-			always: true
-			env: {
-				KC: client.env.KUBECONFIG
-				AN: client.env.APP_NAME
-				OG: client.env.ORGANIZATION
-				GT: client.env.GITHUB_TOKEN
+	actions: {
+		applicationName: client.env.APP_NAME
+		accessToken:     client.env.GITHUB_TOKEN
+		organization:    client.env.ORGANIZATION
+		sourceCodeDir:   client.filesystem.code.read.contents
+
+		up: {
+			initRepos: {
+				initBackendRepo: github.#ManageRepo & {
+					sourceCodePath:    "go-gin"
+					suffix:            ""
+					"applicationName": applicationName
+					"accessToken":     accessToken
+					"organization":    organization
+					"sourceCodeDir":   sourceCodeDir
+					repoVisibility:    client.env.REPO_VISIBILITY
+					kubeconfig:        client.commands.kubeconfig.stdout
+					operationType:     "init"
+				}
 			}
-			script: contents: #"""
-				echo kubeconfig: $KC >> /result.yaml
-				echo applicationname: $AN >> /result.yaml
-				echo organization: $OG >> /result.yaml
-				echo githubtoken: $GT >> /result.yaml
-				"""#
 		}
-		readFile: dagger.#ReadFile & {
-			input: run.output.rootfs
-			path:  "/result.yaml"
+
+		down: {
+			deleteRepos: {
+				deleteBackendRepo: github.#ManageRepo & {
+					sourceCodePath:    "go-gin"
+					suffix:            ""
+					"applicationName": applicationName
+					"accessToken":     accessToken
+					"organization":    organization
+					"sourceCodeDir":   sourceCodeDir
+					repoVisibility:    client.env.REPO_VISIBILITY
+					kubeconfig:        client.commands.kubeconfig.stdout
+					operationType:     "delete"
+				}
+			}
 		}
-		output: readFile.contents
 	}
 }

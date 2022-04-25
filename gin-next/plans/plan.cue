@@ -37,11 +37,6 @@ dagger.#Plan & {
 			GITHUB_TOKEN:    dagger.#Secret
 			REPO_VISIBILITY: "public" | "private"
 		}
-		// filesystem: "config.yaml": write: {
-		//  // Convert a CUE value into a YAML formatted string
-		//  contents: yaml.Marshal(actions.outputStruct)
-		// }
-		//filesystem: ingress_version: write: contents: actions.getIngressVersion.export.files["/result"]
 	}
 
 	actions: {

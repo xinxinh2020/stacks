@@ -9,6 +9,10 @@ dagger.#Plan & {
 	client: {
 		filesystem: {
 			code: read: contents: dagger.#FS
+			"./output.yaml": write: {
+				// Convert a CUE value into a YAML formatted string
+				contents: actions.up.outputYaml.output
+			}
 		}
 		commands: kubeconfig: {
 			name: "cat"
@@ -42,6 +46,11 @@ dagger.#Plan & {
 					repoVisibility:    client.env.REPO_VISIBILITY
 					kubeconfig:        client.commands.kubeconfig.stdout
 					operationType:     "init"
+				}
+			}
+			outputYaml: #OutputStruct & {
+				repository: {
+					backend:  initRepos.initBackendRepo.url
 				}
 			}
 		}

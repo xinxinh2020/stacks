@@ -4,9 +4,12 @@ import (
 	"dagger.io/dagger"
 	"github.com/h8r-dev/stacks/cuelib/scm/github"
 	"github.com/h8r-dev/stacks/cuelib/deploy/helm"
+	"github.com/h8r-dev/stacks/cuelib/deploy/kubectl"
+	"github.com/h8r-dev/stacks/cuelib/cd/argocd"
 	"github.com/h8r-dev/stacks/cuelib/network/ingress"
 	githubAction "github.com/h8r-dev/stacks/cuelib/ci/github"
 	"github.com/h8r-dev/stacks/cuelib/framework/react/next"
+	"github.com/h8r-dev/stacks/cuelib/h8r/h8r"
 )
 
 dagger.#Plan & {
@@ -129,6 +132,14 @@ dagger.#Plan & {
 				helmSet:            "ingress.hosts[0].paths[0].servicePort=80,ingress.hosts[0].paths[1].servicePort=8000,ingress.hosts[0].paths[0].path=/,ingress.hosts[0].paths[1].path=/api,ingress.hosts[0].host=" + appDomain + ",ingress.hosts[0].paths[0].serviceName=" + client.env.APP_NAME + "-front,ingress.hosts[0].paths[1].serviceName=" + client.env.APP_NAME
 				githubToken:        client.env.GITHUB_TOKEN
 				githubOrganization: client.env.ORGANIZATION
+			}
+
+			// create image pull secret for argocd
+			createImagePullSecret: kubectl.#CreateImagePullSecret & {
+				kubeconfig: client.commands.kubeconfig.stdout
+				username:   client.env.ORGANIZATION
+				password:   client.env.GITHUB_TOKEN
+				namespace:  applicationInstallNamespace
 			}
 
 			initApplication: app: h8r.#CreateH8rIngress & {

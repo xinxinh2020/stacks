@@ -84,12 +84,8 @@ fi
 # Update helm default values file
 HELM_VALUES_FILE=/root/helm/values.yaml
 if [ -f $HELM_VALUES_FILE ] && [ $ISHELMCHART == "true" ]; then
-  yq eval -i '.image.repository = "ghcr.io/" + env(GITHUB_OWNER) + "/" + env(BACKEND_NAME)' $HELM_VALUES_FILE
   yq eval -i '.frontImage.repository = "ghcr.io/" + env(GITHUB_OWNER) + "/" + env(FRONTEND_NAME)' $HELM_VALUES_FILE
-  yq eval -i '.nocalhost.backend.dev.gitUrl = "git@github.com:" + env(GITHUB_OWNER) + "/" + env(BACKEND_NAME) + ".git"' $HELM_VALUES_FILE
-  yq eval -i '.nocalhost.frontend.dev.gitUrl = "git@github.com:" + env(GITHUB_OWNER) + "/" + env(FRONTEND_NAME) + ".git"' $HELM_VALUES_FILE
   yq eval -i '.ingress.hosts[0].path[0].serviceName = env(FRONTEND_NAME)' $HELM_VALUES_FILE
-  yq eval -i '.ingress.hosts[0].path[1].serviceName = env(BACKEND_NAME)' $HELM_VALUES_FILE
 fi
 
 # Update helm chart file

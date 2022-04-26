@@ -4,12 +4,6 @@
 
 replicaCount: 1
 
-image:
-  repository: ghcr.io/h8r-dev/stack-hub
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "main"
-
 frontImage:
   repository: ghcr.io/h8r-dev/stack-hub
   pullPolicy: Always
@@ -60,9 +54,6 @@ ingress:
         - path: /
           serviceName: xxx-front
           servicePort: 80
-        - path: /api
-          serviceName: xxx
-          servicePort: 8000
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

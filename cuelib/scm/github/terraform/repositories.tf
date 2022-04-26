@@ -20,6 +20,10 @@ resource "github_repository" "initRepo" {
   visibility = var.repo_visibility
 }
 
+output "repo_url" {
+  value = github_repository.initRepo.html_url
+}
+
 # Set github token as github action secret.
 resource "github_actions_secret" "secret_PAT" {
   repository = github_repository.initRepo.id

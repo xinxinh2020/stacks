@@ -4,9 +4,6 @@ metadata:
   name: {{ include "gin-next.fullname" . }}-front
   labels:
     app: {{ include "gin-next.fullname" . }}-front
-  annotations:
-    dev.nocalhost: |-
-      {{ tpl (.Files.Get .Values.nocalhost.frontend.annotations.path) . | nindent 6 }}
 spec:
   replicas: 1
   selector:

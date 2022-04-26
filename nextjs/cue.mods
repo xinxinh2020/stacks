@@ -1,4 +1,4 @@
-module github.com/h8r-dev/sample
+module github.com/h8r-dev/stacks/nextjs
 
 cue 0.4.0
 

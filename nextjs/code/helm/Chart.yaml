@@ -23,11 +23,11 @@ version: 0.1.0
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
 
-dependencies:
-- name: mariadb
-  version: "9.0.1"
-  repository: "https://nocalhost-helm.pkg.coding.net/nocalhost/helm"
-
-- name: redis
-  version: "16.4.0"
-  repository: "https://charts.bitnami.com/bitnami"
+# dependencies:
+# - name: mariadb
+#   version: "9.0.1"
+#   repository: "https://nocalhost-helm.pkg.coding.net/nocalhost/helm"
+#
+# - name: redis
+#   version: "16.4.0"
+#   repository: "https://charts.bitnami.com/bitnami"

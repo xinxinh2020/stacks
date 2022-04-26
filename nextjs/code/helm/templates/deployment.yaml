@@ -4,9 +4,6 @@ metadata:
   name: {{ include "gin-next.fullname" . }}
   labels:
     {{- include "gin-next.labels" . | nindent 4 }}
-  annotations:
-    dev.nocalhost: |-
-      {{ tpl (.Files.Get .Values.nocalhost.backend.annotations.path) . | nindent 6 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

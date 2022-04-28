@@ -6,12 +6,13 @@
 1. 不依赖 H8r Server，内部使用 Service Name 访问，外部使用 Hosts 访问
 1. 支持应用组合、添加应用（待完善）
 1. 优化运行体验和提升运行速度
-  1. 自定义执行镜像
-  1. 删除不必要的等待
+    1. 自定义执行镜像
+    1. 删除不必要的等待
 
 ## Requirements
 
 1. Kind v0.12.0+
+1. hln
 1. Docker, **Docker daemon resource setting > 8C, 16G**
 1. Kubectl v1.20+
 
@@ -22,8 +23,6 @@
 ## 已知问题
 1. 初始化完成后，添加新的应用或 Addons 不会生效
 1. 未初始化 Nocalhost 数据
-1. 后端服务缺少配置，无法启动
-1. Release 流程未处理
 1. 暂时缺少 `output.yaml` 输出
 
 ## Quick Start
@@ -49,13 +48,11 @@
       - containerPort: 443
         hostPort: 443
         protocol: TCP
-      - containerPort: 31234
-        hostPort: 1234
     EOF
     ```
-1. 切换 Kind context
+1. 运行 hln init
     ```
-    kind export kubeconfig
+    hln init --install-buildkit
     ```
 1. 部署 Buildkit(考虑自动化)
     ```shell

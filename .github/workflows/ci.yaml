@@ -58,7 +58,7 @@ jobs:
         env:
           STACK_DIR: ${{ env.stack_dir }}
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          ORGANIZATION: heigliner-robot
+          ORGANIZATION: heigliner-robot-01
           HLN_LOG_LEVEL: "debug"
           HLN_LOG_FORMAT: "plain"
         run: |
